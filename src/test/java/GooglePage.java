@@ -16,6 +16,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
 public class GooglePage {
+    private final String browser;
     public void searchFor(String query) {
         open("https://google.com");
         $(By.name("q")).setValue(query).pressEnter();
@@ -28,7 +29,7 @@ public class GooglePage {
     private void downloadPic(String url) throws MalformedURLException {
         URL website = new URL(url);
         try (InputStream in = website.openStream()) {
-            Files.copy(in, Paths.get("pic.jpg"), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(in, Paths.get(String.join("_", browser, "pic.jpg")), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -57,6 +58,7 @@ public class GooglePage {
     }
 
     GooglePage(String browser, Boolean holdBrowserOpen) {
+        this.browser = browser;
         Configuration.browser = browser;
         Configuration.holdBrowserOpen = holdBrowserOpen;
     }
